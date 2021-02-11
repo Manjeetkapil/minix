@@ -11,6 +11,7 @@
 #include "schedproc.h"
 #include <assert.h>
 #include <minix/com.h>
+#include <minix/endpoint.h>
 #include <machine/archtypes.h>
 #include "kernel/proc.h" /* for queue constants */
 
@@ -303,6 +304,9 @@ static int schedule_process(struct schedproc * rmp, unsigned flags)
 	int new_prio, new_quantum, new_cpu;
 
 	pick_cpu(rmp);
+
+	if(rmp->priority >= 7)
+		printf("PID %d swapped in\n", _ENDPOINT_P(rmp->endpoint));
 
 	if (flags & SCHEDULE_CHANGE_PRIO)
 		new_prio = rmp->priority;
